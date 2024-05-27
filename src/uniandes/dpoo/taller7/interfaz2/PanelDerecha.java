@@ -59,7 +59,7 @@ public class PanelDerecha extends JPanel implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				ventana.mostrarTop();
 			}
 		});
 		

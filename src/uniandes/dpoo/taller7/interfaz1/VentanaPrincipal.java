@@ -3,7 +3,11 @@ package uniandes.dpoo.taller7.interfaz1;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -12,6 +16,7 @@ import javax.swing.JPanel;
 import uniandes.dpoo.taller7.interfaz2.PanelDerecha;
 import uniandes.dpoo.taller7.interfaz2.PanelInferior;
 import uniandes.dpoo.taller7.interfaz2.PanelSuperior;
+import uniandes.dpoo.taller7.interfaz2.Paneltop;
 import uniandes.dpoo.taller7.interfaz3.PanelCuadros;
 import uniandes.dpoo.taller7.modelo.Tablero;
 import uniandes.dpoo.taller7.modelo.Top10;
@@ -66,6 +71,19 @@ public class VentanaPrincipal extends JFrame {
 		this.ventana.setVisible(true);
 		
 		
+		this.ventana.addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				try {
+					top.salvarRecords(new File("./data/top10.csv"));
+				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
 	public void nuevoJuego() {
@@ -84,14 +102,14 @@ public class VentanaPrincipal extends JFrame {
 	
 	
 	public void reiniciar() {
-		remove(juego);
-		revalidate();
-		repaint();
+		ventana.remove(juego);
+		ventana.revalidate();
+		ventana.repaint();
 		tablero.reiniciar();
-		juego = new PanelCuadros(tablero, null, inferior);
+		juego = new PanelCuadros(tablero, this, inferior);
 		add(juego,BorderLayout.CENTER);
-		revalidate();
-		repaint();
+		ventana.revalidate();
+		ventana.repaint();
 		setJugadas(0);
 	}
 	
@@ -127,5 +145,8 @@ public class VentanaPrincipal extends JFrame {
 		if(top.esTop10(puntaje)) {
 			top.agregarRegistro(inferior.getJugador(), puntaje);
 		}
+	}
+	public void mostrarTop() {
+		new Paneltop(this, this.top);
 	}
 }
